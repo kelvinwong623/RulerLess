@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    public double calcDistance(double lat1, double lon1, double lat2, double lon2)
     {
         double ans = 0;
         return ans;
