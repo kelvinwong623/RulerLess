@@ -83,15 +83,8 @@ public class MainActivity extends AppCompatActivity {
             }
             return;
         }
-        // this code won't execute IF permissions are not allowed, because in the line above there is return statement.
-        calcButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //noinspection MissingPermission
-                locManager.requestLocationUpdates("gps", 0, 0, locListen);
-            }
-        });
     }
+        // this code won't execute IF permissions are not allowed, because in the line above there is return statement.
 
     /**
      * Calculate distance between two points in latitude and longitude taking
