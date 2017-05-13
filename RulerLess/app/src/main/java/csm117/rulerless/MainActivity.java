@@ -15,7 +15,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         display = (TextView) findViewById(R.id.distText);
-        calcButton = (Button) findViewById(R.id.calcButton);
+        //calcButton = (Button) findViewById(R.id.calcButton);
         locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locListen = new LocationListener() {
             @Override
@@ -114,4 +117,11 @@ public class MainActivity extends AppCompatActivity {
 
         return Math.sqrt(distance);
     }
+
+    public void connect(View view) {
+        // TO DO
+        Intent intent = new Intent(this, ConnectionEstablished.class);
+        startActivity(intent);
+    }
+
 }
