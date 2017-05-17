@@ -49,7 +49,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:clickable="true"
-        android:text="Placeholder "
         android:textSize="30sp"
         android:text = "PLACEHOLDER"
         app:layout_constraintBottom_toBottomOf="parent"

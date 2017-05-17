@@ -1,11 +1,15 @@
 package csm117.rulerless;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -24,7 +28,10 @@ public class MainActivity extends AppCompatActivity {
     TextView display;
     Location currentLoc;
     Button calcButton;
-
+    WifiP2pManager mManager;
+    WifiP2pManager.Channel mChannel;
+    BroadcastReceiver mReceiver;
+    IntentFilter mIntentFilter;
 
 
     @Override
@@ -32,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "Application Started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mIntentFilter = new IntentFilter();
+        mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        mChannel = mManager.initialize(this, getMainLooper(), null);
+        mReceiver = new Broadcaster(mManager, mChannel, this);
         display = (TextView) findViewById(R.id.distText);
         calcButton = (Button) findViewById(R.id.calcButton);
         locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -61,7 +72,24 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         Log.d("test", "start");
+
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
         configure_button();
+    }
+
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(mReceiver, mIntentFilter);
+    }
+    /* unregister the broadcast receiver */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mReceiver);
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
